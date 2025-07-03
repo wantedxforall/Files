@@ -32,6 +32,10 @@ class ServiceController extends Controller
         ]);
 
         $user =  auth()->user();
+        if ($user->credits < gs()->deduct_credits) {
+            $notify[] = ['error', 'Insufficient credits to create a service'];
+            return back()->withNotify($notify);
+        }
         $purifier = new \HTMLPurifier();
 
         $service = new Service();
